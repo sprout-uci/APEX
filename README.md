@@ -1,10 +1,10 @@
-# VAPE:
+# APEX:
 
-Modern society is increasingly surrounded by, and is growingaccustomed to, a wide range of Cyber-Physical Systems (CPS),Internet-of-Things (IoT), andsmartdevices. They often per-form safety-critical functions, e.g., personal medical devices,automotive CPS as well as industrial and residential automa-tion (e.g., sensor-alarm combinations). On the lower end of thescale, these devices are small, cheap and specialized sensorsand/or actuators. They tend to be equipped with small anemicCPU, have small amounts of memory and run simple software.If such devices are left unprotected, consequences of forgedsensor readings or ignored actuation commands can be catas-trophic, particularly, in safety-critical settings. This prompts the following three questions:(1) How to trust data produced,or verify that commads were performed, by a simple remoteembedded device?,(2) How to bind these actions/results tothe execution of expected software?and,(3) Can (1) and (2)be attained even if all software on a device could be modifiedand/or compromised?
+Modern society is increasingly surrounded by, and is growingaccustomed to, a wide range of Cyber-Physical Systems (CPS),Internet-of-Things (IoT), andsmartdevices. They often perform safety-critical functions, e.g., personal medical devices, automotive CPS as well as industrial and residential automation (e.g., sensor-alarm combinations). On the lower end of the scale, these devices are small, cheap and specialized sensors and/or actuators. They tend to be equipped with small anemic CPU, have small amounts of memory and run simple software. If such devices are left unprotected, consequences of forged sensor readings or ignored actuation commands can be catastrophic, particularly, in safety-critical settings. This prompts the following three questions:(1) How to trust data produced,or verify that commands were performed, by a simple remote embedded device?, (2) How to bind these actions/results tothe execution of expected software? and,(3) Can (1) and (2) be attained even if all software on a device could be modified and/or compromised?
 
-In  this  work  we  answer  these  questions  by  designing, showing security of, and formally verifying,VAPE:VerifiedArchitecture forProofs ofExecution. To the best of our knowl-edge, this is the first of its kind result for low-end embeddedsystems. Our work has a range of applications, especially, toauthenticated sensing and trustworthy actuation, which are in-creasingly relevant in the context of safety-critical systems.VAPEarchitecture is publicly available and our evaluation in-dicates that it incurs low overhead, affordable even for verylow-end embedded devices, e.g., those based on TI MSP430 or AVR ATmega processors.
+In  this  work  we  answer  these  questions  by  designing, showing security of, and formally verifying, APEX: Architecture Proofs of Execution (formally known as VAPE -- we use VAPE and APEX interchangably in this repo). To the best of our knowl-edge, this is the first of its kind result for low-end embeddedsystems. Our work has a range of applications, especially, to authenticated sensing and trustworthy actuation, which are increasingly relevant in the context of safety-critical systems. APEX architecture is publicly available and our evaluation indicates that it incurs low overhead, affordable even for very low-end embedded devices, e.g., those based on TI MSP430 or AVR ATmega processors.
 
-### VAPE Directory Structure
+### APEX Directory Structure
 
 	├── msp_bin
 	├── openmsp430
@@ -170,7 +170,7 @@ NOTE: In the violation cases authetication token result (in p3_dout[7:0]) should
         make run
 
 This command line simulation is the fastest option, but it will only print the contents of the microcontroller registers at each cycle. It is only useful for debugging purposes.
-For more resourceful simulation follow [Running VAPE on Vivado Simulation Tools].
+For more resourceful simulation follow [Running VAPE on Vivado Simulation Tools](#running-vape-on-vivado-simulation-tools).
 
 ## Running VAPE Verification
 
