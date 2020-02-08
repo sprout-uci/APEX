@@ -38,6 +38,18 @@ In  this  work  we  answer  these  questions  by  designing, showing security of
 		└── sw-att
 		    └── hacl-c
 
+## Dependencies
+
+Environment (processor and OS) used for development and verification:
+Intel i7-3770
+Ubuntu 18.04.3 LTS
+
+Dependencies on Ubuntu:
+
+		sudo apt-get install bison pkg-config gawk clang flex gcc-msp430 iverilog
+		cd scripts && make install
+
+To run soundness and security proofs, install Spot: https://spot.lrde.epita.fr/install.html
 
 ## Building VAPE Software
 To generate the Microcontroller program memory configuration containing VRASED trusted software (SW-Att) and sample application (in application/main.c) code run:
@@ -126,31 +138,31 @@ Your FPGA should be now displayed on the hardware manager menu.
 
 1) In Vivado, click "Add Sources" (Alt-A), then select "Add or create simulation sources", click "Add Files", and select everything in openmsp430/simulation.
 2) Now, navigate "Sources" window in Vivado. In "Simulation Sources" tab, set "tb_openMSP430_fpga.v" as top module
-3) Assuming we want to run simulation  of PoX from the code in folder XX, open a linux terminal, go inside the scripts folder and run "make XX", i.e., "make simple_app" for "simple_app" testcase.
-4) Go back to VIVADO window and in the "Flow Navigator" tab (in the left), click "Run Simulation", then "Run Behavioral Simulation".
+3) Assuming we want to run simulation of PoX from the code in folder XX, open a linux terminal, go inside the scripts folder (./scripts) and run "make XX", i.e., "make simple_app" for "simple_app" testcase.
+4) Go back to Vivado window and in the "Flow Navigator" tab (on the left-most of Vivado), click "Run Simulation", then "Run Behavioral Simulation".
 5) Add how much time you want to run (See each testcase below) and do "Shift+F2" to run.
 6) In the green wave window you will see values for several signals. The imporant ones are "p3_dout[7:0]", "exec", and "pc[15:0]". pc cointains the program counter value. exec corresponds to the value of VAPE's exec flag, described in the paper. p3_dout[7:0] will store the token generated as a proof of execution.
 
-For all testcases, in Vivado simulation, the final value of pc[0:15] should correspond to instructions in "success" function (i.e., the program should halt in such function).
-To determine instruction range of "success" function (values of ER_min and ER_max, per VAPE's paper), one can look into scripts/tmp-build/XX/vrased.lst and search for "success"
+For all testcases, in Vivado simulation, the final value of pc[0:15] should correspond to instruction address inside "success" function (i.e., the program should halt inside "success" function).
+To determine instruction addresses of "success" function as well as those of ER function (values of ER_min and ER_max, per VAPE's paper), one can look into scripts/tmp-build/XX/vrased.lst and search for "success" or "dummy_function", respectively.
 
-Description of each testcase:
+### Description of each testcase:
 
-- simple_app: corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation, (3) output the token (in this case, write it to P3OUT (p3_dout[7:0] in vivado simulation window).
-At the end of simple_app's simulation, P3OUT (over time) should store the correct authenticated token value: "B29641FABECD66607521F0CAEA21590C6AEB0F79DE4D0A435251B94B6D6F636B".
+- simple_app: corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation, (3) output the token (in this case, write it to P3OUT -- p3_dout[7:0] in vivado simulation window).
+At the end of simple_app's simulation, P3OUT (over time) should store the correct authenticated token value: "3622822327FC4E8FE649D44CB964E98C50050446364925B10D533BE831706064".
 This corresponds to a token computed over attested memory with exec=1 (valid proof of execution).
 See utils/get_token_simple_app.py for how this token is generated.
-In this testcase, you need to run the simulation for 800ms (in simulation time, not real-time) to generate the authenticated token value on P3OUT.
+In this testcase, you need to run the simulation for 753ms (in simulation time, not real time) to generate the authenticated token value on P3OUT.
 
-NOTE: running 800ms of simulation may take several minutes. Zooming out the the waves windows can help in speeding up the process.
+NOTE: running 753ms of simulation may take up to an hour. Zooming out the the waves windows can help in speeding up the process.
 
-- violation_forge_ER: corresponds to a testcase where code in region ER is overwritten after it executed. less than 1ms to complete simulation.
+- violation_forge_ER: corresponds to a testcase where code in region ER is overwritten after it executed. It should take less than 1ms to complete this simulation.
 
-- violation_forge_OR: corresponds to a testcase where result in OR region is overwritten after ER executed. less than 1ms to complete simulation.
+- violation_forge_OR: corresponds to a testcase where result in OR region is overwritten after ER executed. It should take less than 1ms to complete this simulation.
 
-- violation_forge_META: correspond to a testcase where METADATA value is overwritten after ER executed. less than 1ms to complete simulation.
+- violation_forge_META: correspond to a testcase where METADATA value is overwritten after ER executed. It should take less than 1ms to complete this simulation.
 
-NOTE: In the violation cases authetication token result (in p3_dout[7:0]) should *NOT* be set to "B29641FABECD66607521F0CAEA21590C6AEB0F79DE4D0A435251B94B6D6F636B". Since there was a (malicious) violation, the prover should not be able to produce the correct authenticated token (proof of execution). By checking the value of "exec" in the simulation window one can check that exec value switches from 1 to 0 at the time of the violation.
+NOTE: In the violation cases authetication token result (in p3_dout[7:0]) should *NOT* be set to the correct value. Since there was a (malicious) violation, the prover should not be able to produce the correct authenticated token (proof of execution). By checking the value of "exec" in the simulation window, one can see that exec value switches from 1 to 0 at the time of the violation.
 
 ## Running VAPE via Command Line Simulation
 
