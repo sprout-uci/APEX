@@ -6,40 +6,40 @@ In  this  work  we  answer  these  questions  by  designing, showing security of
 
 ### VAPE Directory Structure
 
-├── msp_bin
-├── openmsp430
-│   ├── contraints_fpga
-│   ├── fpga
-│   ├── msp_core
-│   ├── msp_memory
-│   ├── msp_periph
-│   └── simulation
-├── scripts
-│   ├── build
-│   ├── build-verif
-│   └── verif-tools
-├── simple_app
-│   └── simulation
-├── test
-│   └── simulation
-├── utils
-├── verification_specs
-│   └── soundness_and_security_proofs
-├── verifier
-├── violation_forge_ER
-│   └── simulation
-├── violation_forge_META
-│   └── simulation
-├── violation_forge_OR
-│   └── simulation
-└── vrased
-    ├── hw-mod
-    │   └── hw-mod-auth
-    └── sw-att
-        └── hacl-c
+	├── msp_bin
+	├── openmsp430
+	│   ├── contraints_fpga
+	│   ├── fpga
+	│   ├── msp_core
+	│   ├── msp_memory
+	│   ├── msp_periph
+	│   └── simulation
+	├── scripts
+	│   ├── build
+	│   ├── build-verif
+	│   └── verif-tools
+	├── simple_app
+	│   └── simulation
+	├── test
+	│   └── simulation
+	├── utils
+	├── verification_specs
+	│   └── soundness_and_security_proofs
+	├── verifier
+	├── violation_forge_ER
+	│   └── simulation
+	├── violation_forge_META
+	│   └── simulation
+	├── violation_forge_OR
+	│   └── simulation
+	└── vrased
+		├── hw-mod
+		│   └── hw-mod-auth
+		└── sw-att
+		    └── hacl-c
 
 
-## Building VRASED Software
+## Building VAPE Software
 To generate the Microcontroller program memory configuration containing VRASED trusted software (SW-Att) and sample application (in application/main.c) code run:
 
         cd scripts
@@ -57,19 +57,19 @@ As a result of the build, two files pmem.mem and smem.mem should be created insi
 
         Note: Latest Build tested using msp430-gcc (GCC) 4.6.3 2012-03-01
 
-## Running VRASED Prototype on FPGA
+## Running VAPE Prototype on FPGA
 
-This is an example of how to synthesize and prototype VRASED using Basys3 FPGA and XILINX Vivado v2017.4 (64-bit) IDE for Linux
+This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and XILINX Vivado v2017.4 (64-bit) IDE for Linux
 
 - Vivado IDE is available to download at: https://www.xilinx.com/support/download.html
 
 - Basys3 Reference/Documentation is available at: https://reference.digilentinc.com/basys3/refmanual
 
-#### Creating a Vivado Project for VRASED
+#### Creating a Vivado Project for VAPE
 
 1 - Clone this repository;
 
-2 - Follow the steps in [Building VRASED Software](#building-vrased-software) to generate .mem files
+2 - Follow the steps in [Building VAPE Software](#building-VAPE-software) to generate .mem files
 
 2- Start Vivado. On the upper left select: File -> New Project
 
@@ -92,13 +92,13 @@ and select Next.
 
 and select Next.
 
-        Note: this file needs to be modified accordingly if you are running VRASED in a different FPGA.
+        Note: this file needs to be modified accordingly if you are running VAPE in a different FPGA.
 
 6- In the "Default Part" window select "Boards", search for Basys3, select it, and click Next.
 
         Note: if you don't see Basys3 as an option you may need to download Basys3 to Vivado.
 
-7- Select "Finish". This will conclude the creation of a Vivado Project for VRASED.
+7- Select "Finish". This will conclude the creation of a Vivado Project for VAPE.
 
 Now we need to configure the project for systhesis.
 
@@ -107,7 +107,7 @@ This will make openMSP430_fpga.v the top module in the project hierarchy. Now it
 
 9- In the same "Sources" window, search for openMSP430_defines.v file, right click it and select Set File Type and, from the dropdown menu select "Verilog Header".
 
-Now we are ready to synthesize openmsp430 with VRASED's hardware the following steps might take several minutes.
+Now we are ready to synthesize openmsp430 with VAPE's hardware the following steps might take several minutes.
 
 10- On the left menu of the PROJECT MANAGER click "Run Synthesis", select execution parameters (e.g, number of CPUs used for synthesis) according to your PC's capabilities.
 
@@ -122,11 +122,7 @@ Your FPGA should be now displayed on the hardware manager menu.
 
 14- Right-click your FPGA and select "Program Device" to program the FPGA.
 
-15- If everything succeeds your FPGA should be displaying a pattern similar to the on in the video in /demo/vrased.mp4.
-
-When all LD0 to LD8 are on at the same time, VRASED is computing attestation of the openmsp430's program memory.
-
-## Running VRASED on Vivado Simulation Tools
+## Running VAPE on Vivado Simulation Tools
 
 1) In Vivado, click "Add Sources" (Alt-A), then select "Add or create simulation sources", click "Add Files", and select everything in openmsp430/simulation.
 2) Now, navigate "Sources" window in Vivado. In "Simulation Sources" tab, set "tb_openMSP430_fpga.v" as top module
@@ -161,7 +157,7 @@ NOTE: In the violation cases authetication token result (in p3_dout[7:0]) should
         make run
 
 This command line simulation is the fastest option, but it will only print the contents of the microcontroller registers at each cycle. It is only useful for debugging purposes.
-For more resourceful simulation follow [Running VRASED on Vivado Simulation Tools](#building-vrased-software).
+For more resourceful simulation follow [Running VAPE on Vivado Simulation Tools].
 
 ## Running VAPE Verification
 
