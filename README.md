@@ -137,7 +137,8 @@ To determine instruction range of "success" function (values of ER_min and ER_ma
 Description of each testcase:
 
 - simple_app: corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation, (3) output the token (in this case, write it to P3OUT (p3_dout[7:0] in vivado simulation window).
-At the end of simple_app's simulation, P3OUT (over time) should store the correct authenticated token value: "B29641FABECD66607521F0CAEA21590C6AEB0F79DE4D0A435251B94B6D6F636B". 
+At the end of simple_app's simulation, P3OUT (over time) should store the correct authenticated token value: "B29641FABECD66607521F0CAEA21590C6AEB0F79DE4D0A435251B94B6D6F636B".
+This corresponds to a token computed over attested memory with exec=1 (valid proof of execution).
 See utils/get_token_simple_app.py for how this token is generated.
 In this testcase, you need to run the simulation for 800ms (in simulation time, not real-time) to generate the authenticated token value on P3OUT.
 
@@ -149,7 +150,7 @@ NOTE: running 800ms of simulation may take several minutes. Zooming out the the 
 
 - violation_forge_META: correspond to a testcase where METADATA value is overwritten after ER executed. less than 1ms to complete simulation.
 
-NOTE: In the violation cases authetication token result (in p3_dout[7:0]) should *NOT* correspond to "B29641FABECD66607521F0CAEA21590C6AEB0F79DE4D0A435251B94B6D6F636B". Since there was a (malicious) violation, the prover should not be able to produce the correct authenticated token (proof of execution).
+NOTE: In the violation cases authetication token result (in p3_dout[7:0]) should *NOT* be set to "B29641FABECD66607521F0CAEA21590C6AEB0F79DE4D0A435251B94B6D6F636B". Since there was a (malicious) violation, the prover should not be able to produce the correct authenticated token (proof of execution). By checking the value of "exec" in the simulation window one can check that exec value switches from 1 to 0 at the time of the violation.
 
 ## Running VAPE via Command Line Simulation
 
