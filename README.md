@@ -52,20 +52,33 @@ Dependencies on Ubuntu:
 To run soundness and security proofs, install Spot: https://spot.lrde.epita.fr/install.html
 
 ## Building VAPE Software
-To generate the Microcontroller program memory configuration containing VRASED trusted software (SW-Att) and sample application (in application/main.c) code run:
+To generate the Microcontroller program memory configuration containing VRASED trusted software (SW-Att) and sample applications we are going to use the Makefile inside the scripts directory:
 
         cd scripts
-        make mem
 
-To clean the built files run:
+This repository accompanies 4 test-cases: simple_app, violation_forge_ER, violation_forge_OR, violation_forge_META.
+These test cases correspond to a successfull proof of execution (PoX) and 3 cases where PoX fails due to a violation that could be used to attack the correctness of the execution.
+To build VAPE for a specific test case run
 
-        make clean
+        make "name of test case"
 
+For instance:
+
+        make simple_app
+
+to build the software including the binaries of simple_app test-case.
+Note that this step will not run any simulation but simply generate the MSP430 binaries corresponding to the test-case of choice.
 As a result of the build, two files pmem.mem and smem.mem should be created inside msp_bin directory:
 
 - pmem.mem program memory contents corresponding the application binaries
 
 - smem.mem contains SW-Att binaries.
+
+We will load this files to the MSP430 memory when we either: synthesize VAPE on the FPGA or run VAPE in simulation using VIVADO simulation tools.
+
+To clean the built files run:
+
+        make clean
 
         Note: Latest Build tested using msp430-gcc (GCC) 4.6.3 2012-03-01
 
