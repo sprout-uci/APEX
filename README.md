@@ -74,13 +74,15 @@ As a result of the build, two files pmem.mem and smem.mem should be created insi
 
 - smem.mem contains SW-Att binaries.
 
-We will load this files to the MSP430 memory when we either: synthesize VAPE on the FPGA or run VAPE in simulation using VIVADO simulation tools.
+In the next steps, during synthesis, these files will be load these binaries to the MSP430 memory when we either: synthesize VAPE on the FPGA or run VAPE in simulation using VIVADO simulation tools.
 
 To clean the built files run:
 
         make clean
 
         Note: Latest Build tested using msp430-gcc (GCC) 4.6.3 2012-03-01
+
+To test VAPE with a different application you will need to repeat these steps to generate the new "pmem.mem" file and re-run synthesis (see below).
 
 ## Running VAPE Prototype on FPGA
 
@@ -121,7 +123,7 @@ and select Next.
 
 6- In the "Default Part" window select "Boards", search for Basys3, select it, and click Next.
 
-        Note: if you don't see Basys3 as an option you may need to download Basys3 to Vivado.
+        Note: if you don't see Basys3 as an option you may need to download Basys3 to your Vivado installation.
 
 7- Select "Finish". This will conclude the creation of a Vivado Project for VAPE.
 
