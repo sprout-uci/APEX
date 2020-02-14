@@ -84,7 +84,7 @@ To clean the built files run:
 
 To test VAPE with a different application you will need to repeat these steps to generate the new "pmem.mem" file and re-run synthesis (see below).
 
-## Running VAPE Prototype on FPGA
+## Creating a VAPE project on Vivado and Running Synthesis
 
 This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and XILINX Vivado v2017.4 (64-bit) IDE for Linux
 
@@ -113,6 +113,8 @@ This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and
 
 and select Next.
 
+Note that /msp_bin contain the pmem.mem and smem.mem binaries, generated in step "Building VAPE Software".
+
 5- In the "Add Constraints" window, select add files and add the file
 
         openmsp430/contraints_fpga/Basys-3-Master.xdc
@@ -138,7 +140,11 @@ Now we are ready to synthesize openmsp430 with VAPE's hardware the following ste
 
 10- On the left menu of the PROJECT MANAGER click "Run Synthesis", select execution parameters (e.g, number of CPUs used for synthesis) according to your PC's capabilities.
 
-11- If synthesis succeeds, you will be prompted with the next step. Select "Run Implementation" and wait a few more minutes (typically ~3-10 minutes).
+11- If synthesis succeeds, you will be prompted with the next step to "Run Implementation". You need not to "Run Implementation" if you only want to run Simulation.
+Otherwise, if your purpose is to deploy VAPE on and FPGA you need to select "Run Implementation" and wait until this process completes (typically takes around 1 hour).
+In this case follow the instructions on "Deploying VAPE on Basys3 FPGA".
+
+## Deploying VAPE on Basys3 FPGA
 
 12- If implementation succeeds select "Generate Bitstream" in the following window. This will generate the configuration binary to step up the FPGA according to VRASED hardware and software.
 
@@ -161,7 +167,7 @@ Your FPGA should be now displayed on the hardware manager menu.
 For all testcases, in Vivado simulation, the final value of pc[0:15] should correspond to instruction address inside "success" function (i.e., the program should halt inside "success" function).
 To determine instruction addresses of "success" function as well as those of ER function (values of ER_min and ER_max, per VAPE's paper), one can look into scripts/tmp-build/XX/vrased.lst and search for "success" or "dummy_function", respectively.
 
-### Description of each testcase:
+## Description of Provided Testcases:
 
 - simple_app: corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation, (3) output the token (in this case, write it to P3OUT -- p3_dout[7:0] in vivado simulation window).
 At the end of simple_app's simulation, P3OUT (over time) should store the correct authenticated token value: "3622822327FC4E8FE649D44CB964E98C50050446364925B10D533BE831706064".
@@ -179,20 +185,7 @@ NOTE: running 753ms of simulation may take up to an hour. Zooming out the the wa
 
 NOTE: In the violation cases authetication token result (in p3_dout[7:0]) should *NOT* be set to the correct value. Since there was a (malicious) violation, the prover should not be able to produce the correct authenticated token (proof of execution). By checking the value of "exec" in the simulation window, one can see that exec value switches from 1 to 0 at the time of the violation.
 
-## Running VAPE via Command Line Simulation
-
-        cd scripts
-        make run
-
-This command line simulation is the fastest option, but it will only print the contents of the microcontroller registers at each cycle. It is only useful for debugging purposes.
-For more resourceful simulation follow [Running VAPE on Vivado Simulation Tools](#running-vape-on-vivado-simulation-tools).
-
 ## Running VAPE Verification
-
-First we need to install the verification tools:
-
-        cd scripts
-        make install
 
 To check HW-Mod against VRASED and VAPE LTL subproperties using NuSMV run:
 
