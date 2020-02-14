@@ -96,7 +96,7 @@ This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and
 
 1 - Clone this repository;
 
-2 - Follow the steps in [Building VAPE Software](#building-VAPE-software) to generate .mem files
+2 - Follow the steps in [Building VAPE Software](#building-VAPE-software) to generate .mem files of your choice.
 
 2- Start Vivado. On the upper left select: File -> New Project
 
@@ -113,7 +113,7 @@ This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and
 
 and select Next.
 
-Note that /msp_bin contain the pmem.mem and smem.mem binaries, generated in step "Building VAPE Software".
+Note that /msp_bin contains the pmem.mem and smem.mem binaries, generated in step [Building VAPE Software].
 
 5- In the "Add Constraints" window, select add files and add the file
 
@@ -136,36 +136,39 @@ This will make openMSP430_fpga.v the top module in the project hierarchy. Now it
 
 9- In the same "Sources" window, search for openMSP430_defines.v file, right click it and select Set File Type and, from the dropdown menu select "Verilog Header".
 
-Now we are ready to synthesize openmsp430 with VAPE's hardware the following steps might take several minutes.
+Now we are ready to synthesize openmsp430 with VAPE's hardware the following step might take several minutes.
 
 10- On the left menu of the PROJECT MANAGER click "Run Synthesis", select execution parameters (e.g, number of CPUs used for synthesis) according to your PC's capabilities.
 
 11- If synthesis succeeds, you will be prompted with the next step to "Run Implementation". You need not to "Run Implementation" if you only want to run Simulation.
-Otherwise, if your purpose is to deploy VAPE on and FPGA you need to select "Run Implementation" and wait until this process completes (typically takes around 1 hour).
-In this case follow the instructions on "Deploying VAPE on Basys3 FPGA".
+Otherwise, if your purpose is to deploy VAPE on an FPGA, you need to select "Run Implementation" and wait until this process completes (typically takes around 1 hour).
+If you want to deploy VAPE on an FPGA, continue following the instructions on [Deploying VAPE on Basys3 FPGA].
+If you want to simulate VAPE on VIVADO tools, continue following the instructions on [Running VAPE on Vivado Simulation Tools].
+
+## Running VAPE on Vivado Simulation Tools
+
+1- In Vivado, click "Add Sources" (Alt-A), then select "Add or create simulation sources", click "Add Files", and select everything in openmsp430/simulation.
+2- Now, navigate "Sources" window in Vivado. In "Simulation Sources" tab, set "tb_openMSP430_fpga.v" as top module
+3- Assuming we want to run simulation of PoX from the code in folder XX, open a linux terminal, go inside the scripts folder (./scripts) and run "make XX", i.e., "make simple_app" for "simple_app" testcase.
+4- Go back to Vivado window and in the "Flow Navigator" tab (on the left-most of Vivado), click "Run Simulation", then "Run Behavioral Simulation".
+5- Add how much time you want to run (See each testcase below) and do "Shift+F2" to run.
+6- In the green wave window you will see values for several signals. The imporant ones are "p3_dout[7:0]", "exec", and "pc[15:0]". pc cointains the program counter value. exec corresponds to the value of VAPE's exec flag, described in the paper. p3_dout[7:0] will store the token generated as a proof of execution.
+
+For all testcases, in Vivado simulation, the final value of pc[0:15] should correspond to instruction address inside "success" function (i.e., the program should halt inside "success" function).
+To determine instruction addresses of "success" function as well as those of ER function (values of ER_min and ER_max, per VAPE's paper), one can look into scripts/tmp-build/XX/vrased.lst and search for "success" or "dummy_function", respectively.
 
 ## Deploying VAPE on Basys3 FPGA
 
-12- If implementation succeeds select "Generate Bitstream" in the following window. This will generate the configuration binary to step up the FPGA according to VRASED hardware and software.
+1- After Step 10 in [Creating a Vivado Project for VAPE], select "Run Implementation" and wait until this process completes (typically takes around 1 hour).
 
-13- After the bitstream is generated, select "Open Hardware Manager", connect the FPGA to you computers USB port and click "Auto-Connect".
+2- If implementation succeeds select "Generate Bitstream" in the following window. This will generate the configuration binary to step up the FPGA according to VRASED hardware and software.
+
+3- After the bitstream is generated, select "Open Hardware Manager", connect the FPGA to you computers USB port and click "Auto-Connect".
 Your FPGA should be now displayed on the hardware manager menu.
 
         Note: if you don't see your FPGA after auto-connect you might need to download Basys3 drivers to your computer.
 
-14- Right-click your FPGA and select "Program Device" to program the FPGA.
-
-## Running VAPE on Vivado Simulation Tools
-
-1) In Vivado, click "Add Sources" (Alt-A), then select "Add or create simulation sources", click "Add Files", and select everything in openmsp430/simulation.
-2) Now, navigate "Sources" window in Vivado. In "Simulation Sources" tab, set "tb_openMSP430_fpga.v" as top module
-3) Assuming we want to run simulation of PoX from the code in folder XX, open a linux terminal, go inside the scripts folder (./scripts) and run "make XX", i.e., "make simple_app" for "simple_app" testcase.
-4) Go back to Vivado window and in the "Flow Navigator" tab (on the left-most of Vivado), click "Run Simulation", then "Run Behavioral Simulation".
-5) Add how much time you want to run (See each testcase below) and do "Shift+F2" to run.
-6) In the green wave window you will see values for several signals. The imporant ones are "p3_dout[7:0]", "exec", and "pc[15:0]". pc cointains the program counter value. exec corresponds to the value of VAPE's exec flag, described in the paper. p3_dout[7:0] will store the token generated as a proof of execution.
-
-For all testcases, in Vivado simulation, the final value of pc[0:15] should correspond to instruction address inside "success" function (i.e., the program should halt inside "success" function).
-To determine instruction addresses of "success" function as well as those of ER function (values of ER_min and ER_max, per VAPE's paper), one can look into scripts/tmp-build/XX/vrased.lst and search for "success" or "dummy_function", respectively.
+4- Right-click your FPGA and select "Program Device" to program the FPGA.
 
 ## Description of Provided Testcases:
 
