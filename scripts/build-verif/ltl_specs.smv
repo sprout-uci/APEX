@@ -1,0 +1,160 @@
+-- CODE RESERVED ROM
+    SMEM_BASE := 0uh16_A000;
+    SMEM_SIZE := 0uh16_4000;
+-- KEY RESERVED ROM
+    KMEM_BASE := 0uh16_6A00;
+    KMEM_SIZE := 0uh16_001F;
+-- STACK RESERVED ROM
+    SDATA_BASE := 0uh16_0400;
+    SDATA_SIZE := 0uh16_0C00;
+-- HMAC OUTPUT RESERVED ROM
+    HMAC_BASE := 0uh16_0230;
+    HMAC_SIZE := 0uh16_0020;
+
+--TEMPORARY
+-- ER
+    ER_BASE := "ER_min";
+    LAST_ER := "ER_max";
+-- OR
+    OR_BASE := "OR_min";
+    LAST_OR := "OR_max";
+--    OR_SIZE := 0uh16_0004;
+-- METADATA
+    META_BASE := 0uh16_FF00;
+    META_SIZE := 0uh16_0007;
+-- EXEC flag
+    EXEC_BASE := 0uh16_FF08;
+    EXEC_SIZE := 0uh16_0002;
+--
+    LAST_META := META_BASE + META_SIZE;
+    LAST_EXEC := EXEC_BASE + EXEC_SIZE;
+
+-------------------------------------------------------------
+    daddr_not_in_ER := "data_addr" < ER_BASE | "data_addr" > LAST_ER;
+    daddr_in_ER := !daddr_not_in_ER;
+
+    dma_addr_not_in_ER := "dma_addr" < ER_BASE | "dma_addr" > LAST_ER;
+    dma_addr_in_ER := !dma_addr_not_in_ER;
+-------------------------------------------------------------
+    daddr_not_in_OR := "data_addr" < OR_BASE | "data_addr" > LAST_OR;
+    daddr_in_OR := !daddr_not_in_OR;
+
+    dma_addr_not_in_OR := "dma_addr" < OR_BASE | "dma_addr" > LAST_OR;
+    dma_addr_in_OR := !dma_addr_not_in_OR;
+-------------------------------------------------------------
+    daddr_not_in_META := "data_addr" < META_BASE | "data_addr" > LAST_META;
+    daddr_in_META := !daddr_not_in_META;
+
+    dma_addr_not_in_META := "dma_addr" < META_BASE | "dma_addr" > LAST_META;
+    dma_addr_in_META := !dma_addr_not_in_META;
+-------------------------------------------------------------
+    daddr_not_in_EXEC := "data_addr" < EXEC_BASE | "data_addr" > LAST_EXEC;
+    daddr_in_EXEC := !daddr_not_in_EXEC;
+
+    dma_addr_not_in_EXEC := "dma_addr" < EXEC_BASE | "dma_addr" > LAST_EXEC;
+    dma_addr_in_EXEC := !dma_addr_not_in_EXEC;
+-------------------------------------------------------------
+    pc_fst_ER := "pc" = ER_BASE;
+    pc_last_ER := "pc" = (LAST_ER);
+    pc_in_ER := "pc" >= ER_BASE & "pc" <= (LAST_ER);
+    not_pc_in_ER := !pc_in_ER;	
+
+
+
+    LAST_SMEM_ADDR := SMEM_BASE + SMEM_SIZE - 0uh16_2;
+    RESET_HANDLER := 0uh16_0000;
+
+    pc_in_srom := "pc" >= SMEM_BASE & "pc" <= LAST_SMEM_ADDR;
+    next_pc_in_srom := next("pc") >= SMEM_BASE & next("pc") <= LAST_SMEM_ADDR;
+    access_key := "data_en" & "data_addr" >= KMEM_BASE & "data_addr" < (KMEM_BASE + KMEM_SIZE);
+
+    pc_not_in_srom := !pc_in_srom; 
+    daddr_not_in_sdata := "data_addr" < SDATA_BASE | "data_addr" > SDATA_BASE + SDATA_SIZE - 0uh16_1;
+    daddr_in_sdata := !daddr_not_in_sdata;
+    daddr_not_in_HMAC := "data_addr" < HMAC_BASE | "data_addr" > HMAC_BASE + HMAC_SIZE - 0uh16_1;
+
+    dma_access_key := "dma_en" & "dma_addr" >= KMEM_BASE & "dma_addr" < (KMEM_BASE + KMEM_SIZE);
+    dma_access_X_stack := "dma_en" & "dma_addr" >= SDATA_BASE & "dma_addr" < (SDATA_BASE + SDATA_SIZE);
+
+
+-----------------------------
+-----VRASED s PROPERTIES-----
+-----------------------------
+
+-- Reset correctness
+--LTLSPEC G ("reset" -> (("reset" U "pc" = RESET_HANDLER) | G("reset")));
+
+-- Exclusive Access to Key ---
+LTLSPEC G ((!pc_in_srom & access_key) -> "reset");
+
+-- Atomicity Rules: (1) cannot leave in the middle of ROM code and (2) cannot jump into the middle of ROM code ---
+--LTLSPEC G ( !"reset" & pc_in_srom & !next_pc_in_srom -> "pc" = LAST_SMEM_ADDR | next("reset") );
+--LTLSPEC G ( !"reset" & !pc_in_srom & next_pc_in_srom -> next("pc") = SMEM_BASE | next("reset") );
+LTLSPEC G (pc_in_srom & "irq" -> "reset");
+
+-- Exclusive Access to Secure Stack: (1) Only ROM code can read/write the stack and (2) ROM code cannot write outside the stack ---
+LTLSPEC G ((pc_not_in_srom & ("data_en" | "data_wr") & daddr_in_sdata) -> "reset");
+LTLSPEC G ((pc_in_srom & "data_wr" & daddr_not_in_sdata & daddr_not_in_HMAC) -> "reset");
+
+-- DMA cant access the key
+LTLSPEC G (dma_access_key -> "reset");
+
+-- DMA write cant happen while in ROM
+LTLSPEC G (("dma_en" & pc_in_srom) -> "reset");
+
+-- Disallow any DMA access to the exclusive stack
+LTLSPEC G (dma_access_X_stack -> "reset");
+
+--LTLSPEC ("reset" U ("pc" = RESET_HANDLER) | G"reset");
+--it s Weak until http://nusmv.fbk.eu/courses/icaps03/icaps03-mct.pdf p31
+----------------------------
+
+
+
+
+-----------------------------
+-----VAPE s PROPERTIES-------
+-----------------------------
+-- VAPE s immutability--------------
+LTLSPEC G ((("data_wr" & daddr_in_ER) |("dma_en" & dma_addr_in_ER)) -> !"exec");
+
+-- VAPEs atomicity------------------
+
+LTLSPEC G (pc_in_ER & !next(pc_in_ER) -> pc_last_ER | !next("exec") );
+
+LTLSPEC G (!pc_in_ER & next(pc_in_ER) -> next(pc_fst_ER) | !next("exec") );
+
+LTLSPEC G (pc_in_ER & "irq" -> !"exec");
+
+
+-- VAPE s Output Protection---------
+LTLSPEC G (
+(not_pc_in_ER & "data_wr" & daddr_in_OR) | ("dma_en" & dma_addr_in_OR) | (pc_in_ER & "dma_en")
+-> !"exec");
+
+-- VAPE s Boundaries and Challenge Protection
+LTLSPEC G ((ER_BASE >= LAST_ER | OR_BASE >= LAST_OR | (ER_BASE <= LAST_SMEM_ADDR & SMEM_BASE <= LAST_ER)) -> !"exec");
+
+LTLSPEC G (
+(("data_wr" & daddr_in_META) | ("dma_en" & dma_addr_in_META))
+ -> !"exec");
+
+-- VAPE s Response Protection -------
+
+-- Has to start over to set EXEC to 1
+--LTLSPEC G (!"exec" & next("exec") -> next(pc_fst_ER));
+-- We verify the above property by the following sub-properties (they are equivalent)
+LTLSPEC G ("exec1" & "exec2" & "exec3" & "exec4" & "exec5" <-> "exec");
+LTLSPEC G (!"exec1" -> ((!"exec1" U pc_fst_ER) | G (!"exec1") ));
+LTLSPEC G (!"exec2" -> ((!"exec2" U pc_fst_ER) | G (!"exec2") ));
+LTLSPEC G (!"exec3" -> ((!"exec3" U pc_fst_ER) | G (!"exec3") ));
+LTLSPEC G (!"exec4" -> ((!"exec4" U pc_fst_ER) | G (!"exec4") ));
+LTLSPEC G (!"exec5" -> ((!"exec5" U pc_fst_ER) | G (!"exec5") ));
+
+
+
+--Reset protection ---- CHANGE TO PUC
+LTLSPEC G ("puc" -> !"exec");
+
+
+

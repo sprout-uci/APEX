@@ -1,0 +1,74 @@
+#!/bin/sh
+ltlfilt -c -f '
+(
+!exec
+&&
+
+G(!(pc_crmin && pc_crmax))
+&&
+G(!(pc_ermin && pc_ermax))
+&&
+G(!(pc_crmin && pc_crmax))
+&&
+G(pc_crmin -> pc_in_cr)
+&&
+G(pc_crmax -> pc_in_cr)
+&&
+G(pc_ermin -> pc_in_er)
+&&
+G(pc_ermax -> pc_in_er)
+&&
+
+
+
+
+G(modifyER -> ((daddr_in_ER && w_en) || (dma_addr_in_ER && dma_en)))
+&&
+G(modifyMETA -> ((daddr_in_META && w_en) || (dma_addr_in_META && dma_en)))
+&&
+G(modifyOR -> ((daddr_in_OR && w_en) || (dma_addr_in_OR && dma_en)))
+&&
+G(interrupt -> irq)
+&&
+
+
+
+
+G(((daddr_in_ER && w_en) || (dma_addr_in_ER && dma_en)) -> !exec)
+&&
+
+G(pc_in_er && !X(pc_in_er) -> pc_ermax || !X(exec))
+&&
+G(!pc_in_er && X(pc_in_er) -> X(pc_ermin) || !X(exec))
+&&
+G(pc_in_er && irq -> !exec)
+&&
+
+G( ((!pc_in_er && daddr_in_OR && w_en) || (dma_addr_in_OR && dma_en) || (pc_in_er && dma_en)) -> !exec)
+&&
+
+
+G((pc_in_cr && pc_in_er) -> !exec)
+&&
+G(((daddr_in_META && w_en) || (dma_addr_in_META && dma_en)) -> !exec)
+)
+&&
+
+
+G(!exec && X(exec) -> X(pc_ermin)
+&&
+G(reset -> !exec)
+
+)
+
+->
+
+(
+(pc_ermin &&
+((pc_in_er && !interrupt && !reset) U pc_ermax) &&
+((!modifyMETA && !modifyER && (pc_in_er || !modifyOR)) U pc_in_cr)
+)
+R
+!(pc_in_cr && exec)
+)
+' --equivalent-to 'True'

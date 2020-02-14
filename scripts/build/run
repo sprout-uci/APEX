@@ -1,0 +1,24 @@
+#!/bin/bash
+
+folder="tmp-build"
+rm -rf $folder
+mkdir -p $folder
+mkdir -p $folder/vrased
+mkdir -p $folder/$1
+
+cp -rf ../vrased/sw-att/* $folder/vrased/
+cp -rf ../$1/* $folder/$1/
+cp ./build/linker.msp430.x $folder/$1/
+
+(cd $folder/vrased && make)
+
+cp $folder/vrased/vrased.swatt $folder/
+
+# vrasedsim cfolder verfile submitfile incfile
+cfolder=$folder/$1/
+verfile=$cfolder"/simulation/sim.v"
+submitfile="./build/submit.f"
+incfile="../openmsp430/msp_core/openMSP430_defines.v"
+./build/vrasedsim $cfolder $2
+
+#rm -rf $folder

@@ -1,0 +1,106 @@
+-- CODE RESERVED ROM
+    SMEM_BASE := 0uh16_A000;
+    SMEM_SIZE := 0uh16_4000;
+-- KEY RESERVED ROM
+    KMEM_BASE := 0uh16_6A00;
+    KMEM_SIZE := 0uh16_001F;
+-- STACK RESERVED ROM
+    SDATA_BASE := 0uh16_0400;
+    SDATA_SIZE := 0uh16_0C00;
+-- HMAC OUTPUT RESERVED ROM
+    HMAC_BASE := 0uh16_0230;
+    HMAC_SIZE := 0uh16_0020;
+
+--TEMPORARY
+-- ER
+    ER_BASE := "ER_min";
+    LAST_ER := "ER_max";
+-- OR
+    OR_BASE := "OR_min";
+    LAST_OR := "OR_max";
+--    OR_SIZE := 0uh16_0004;
+-- METADATA
+    META_BASE := 0uh16_FF00;
+    META_SIZE := 0uh16_0007;
+-- EXEC flag
+    EXEC_BASE := 0uh16_FF08;
+    EXEC_SIZE := 0uh16_0002;
+--
+    LAST_META := META_BASE + META_SIZE;
+    LAST_EXEC := EXEC_BASE + EXEC_SIZE;
+
+-------------------------------------------------------------
+    daddr_not_in_ER := "data_addr" < ER_BASE | "data_addr" > LAST_ER;
+    daddr_in_ER := !daddr_not_in_ER;
+
+    dma_addr_not_in_ER := "dma_addr" < ER_BASE | "dma_addr" > LAST_ER;
+    dma_addr_in_ER := !dma_addr_not_in_ER;
+-------------------------------------------------------------
+    daddr_not_in_OR := "data_addr" < OR_BASE | "data_addr" > LAST_OR;
+    daddr_in_OR := !daddr_not_in_OR;
+
+    dma_addr_not_in_OR := "dma_addr" < OR_BASE | "dma_addr" > LAST_OR;
+    dma_addr_in_OR := !dma_addr_not_in_OR;
+-------------------------------------------------------------
+    daddr_not_in_META := "data_addr" < META_BASE | "data_addr" > LAST_META;
+    daddr_in_META := !daddr_not_in_META;
+
+    dma_addr_not_in_META := "dma_addr" < META_BASE | "dma_addr" > LAST_META;
+    dma_addr_in_META := !dma_addr_not_in_META;
+-------------------------------------------------------------
+    daddr_not_in_EXEC := "data_addr" < EXEC_BASE | "data_addr" > LAST_EXEC;
+    daddr_in_EXEC := !daddr_not_in_EXEC;
+
+    dma_addr_not_in_EXEC := "dma_addr" < EXEC_BASE | "dma_addr" > LAST_EXEC;
+    dma_addr_in_EXEC := !dma_addr_not_in_EXEC;
+-------------------------------------------------------------
+    pc_fst_ER := "pc" = ER_BASE;
+    pc_last_ER := "pc" = (LAST_ER);
+    pc_in_ER := "pc" >= ER_BASE & "pc" <= (LAST_ER);
+    not_pc_in_ER := !pc_in_ER;	
+
+
+
+    LAST_SMEM_ADDR := SMEM_BASE + SMEM_SIZE - 0uh16_2;
+    RESET_HANDLER := 0uh16_0000;
+
+    pc_in_srom := "pc" >= SMEM_BASE & "pc" <= LAST_SMEM_ADDR;
+    next_pc_in_srom := next("pc") >= SMEM_BASE & next("pc") <= LAST_SMEM_ADDR;
+    access_key := "data_en" & "data_addr" >= KMEM_BASE & "data_addr" < (KMEM_BASE + KMEM_SIZE);
+
+    pc_not_in_srom := !pc_in_srom; 
+    daddr_not_in_sdata := "data_addr" < SDATA_BASE | "data_addr" > SDATA_BASE + SDATA_SIZE - 0uh16_1;
+    daddr_in_sdata := !daddr_not_in_sdata;
+    daddr_not_in_HMAC := "data_addr" < HMAC_BASE | "data_addr" > HMAC_BASE + HMAC_SIZE - 0uh16_1;
+
+    dma_access_key := "dma_en" & "dma_addr" >= KMEM_BASE & "dma_addr" < (KMEM_BASE + KMEM_SIZE);
+    dma_access_X_stack := "dma_en" & "dma_addr" >= SDATA_BASE & "dma_addr" < (SDATA_BASE + SDATA_SIZE);
+
+LTLSPEC G ("exec1" & "exec2" & "exec3" & "exec4" & "exec5" <-> "exec");
+
+--LTLSPEC G (!"exec1" & next("exec1") -> next(pc_fst_ER));
+--LTLSPEC G (!"exec2" & next("exec2") -> next(pc_fst_ER));
+--LTLSPEC G (!"exec3" & next("exec3") -> next(pc_fst_ER));
+--LTLSPEC G (!"exec4" & next("exec4") -> next(pc_fst_ER));
+--LTLSPEC G (!"exec5" & next("exec5") -> next(pc_fst_ER));
+--LTLSPEC G (!"exec6" & next("exec6") -> next(pc_fst_ER));
+--LTLSPEC G (!"exec7" & next("exec7") -> next(pc_fst_ER));
+
+LTLSPEC G (!"exec1" -> ((!"exec1" U pc_fst_ER) | G (!"exec1") ));
+LTLSPEC G (!"exec2" -> ((!"exec2" U pc_fst_ER) | G (!"exec2") ));
+LTLSPEC G (!"exec3" -> ((!"exec3" U pc_fst_ER) | G (!"exec3") ));
+LTLSPEC G (!"exec4" -> ((!"exec4" U pc_fst_ER) | G (!"exec4") ));
+LTLSPEC G (!"exec5" -> ((!"exec5" U pc_fst_ER) | G (!"exec5") ));
+
+-- Has to start over to set EXEC to 1
+--LTLSPEC G (!"exec_till_er_min" & next("exec_till_er_min") -> next(pc_fst_ER));
+--LTLSPEC G (next(pc_fst_ER) | !next("exec_till_er_min") | "exec");
+--LTLSPEC G ("exec" | ((!"exec_till_er_min" U pc_fst_ER) | G (!"exec_till_er_min") ));
+--LTLSPEC G (!"exec_till_er_min" -> !"exec" );
+
+--LTLSPEC G (pc_in_ER & !next(pc_in_ER) -> pc_last_ER | !next("exec_atomicity") );
+--LTLSPEC G (!pc_in_ER & next(pc_in_ER) -> next(pc_fst_ER) | !next("exec_atomicity") );
+--LTLSPEC G (!"exec_atomicity" -> !"exec" );
+
+
+
