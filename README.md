@@ -56,7 +56,7 @@ To generate the Microcontroller program memory configuration containing VRASED t
 
         cd scripts
 
-This repository accompanies 4 test-cases: simple_app, violation_forge_ER, violation_forge_OR, violation_forge_META.
+This repository accompanies 4 test-cases: simple_app, violation_forge_ER, violation_forge_OR, violation_forge_META. (See [Description of Provided Testcases] for details)
 These test cases correspond to a successfull proof of execution (PoX) and 3 cases where PoX fails due to a violation that could be used to attack the correctness of the execution.
 To build VAPE for a specific test case run
 
@@ -170,7 +170,7 @@ Your FPGA should be now displayed on the hardware manager menu.
 
 4- Right-click your FPGA and select "Program Device" to program the FPGA.
 
-## Description of Provided Testcases:
+## Description of Provided Testcases
 
 - simple_app: corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation, (3) output the token (in this case, write it to P3OUT -- p3_dout[7:0] in vivado simulation window).
 At the end of simple_app's simulation, P3OUT (over time) should store the correct authenticated token value: "3622822327FC4E8FE649D44CB964E98C50050446364925B10D533BE831706064".
