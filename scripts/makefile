@@ -10,9 +10,6 @@ install :
 	sh build.sh ; \
 	cp verilog2smv.sh ../
 
-mem :
-	sh build/run "application" true
-
 simple_app :
 	sh build/run "simple_app" true
 
@@ -24,9 +21,6 @@ violation_forge_ER :
 
 violation_forge_META :
 	sh build/run "violation_forge_META" true
-
-run :
-	sh build/run "application" false
 
 verify :
 	sh verif-tools/run
