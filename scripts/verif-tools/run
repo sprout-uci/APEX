@@ -22,8 +22,8 @@ echo '#include "ltl_specs.smv"' >> ./build-verif/hwmod_generated.smv
 #./verif-tools/NuSMV  -v 2 -pre cpp ./build-verif/hwmod_generated.smv
 #./verif-tools/NuSMV -coi -df -dcx -pre cpp ./build-verif/hwmod_generated.smv
 #./verif-tools/NuSMV -i order.ord -coi -dcx -df -v 1 -pre cpp ./build-verif/hwmod_generated.smv
-#./verif-tools/NuSMV -coi -dcx -df -v 1 -pre cpp ./build-verif/hwmod_generated.smv
-./verif-tools/NuSMV -ctt -v 1 -pre cpp ./build-verif/hwmod_generated.smv
+./verif-tools/NuSMV -coi -dcx -df -v 1 -pre cpp ./build-verif/hwmod_generated.smv
+#./verif-tools/NuSMV -ctt -v 1 -pre cpp ./build-verif/hwmod_generated.smv
 #./verif-tools/NuSMV -bmc -bmc_length 10 -v 1 -pre cpp ./build-verif/hwmod_generated.smv
 
 #rm -rf build-verif
