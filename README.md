@@ -46,7 +46,7 @@ Ubuntu 18.04.3 LTS
 
 Dependencies on Ubuntu:
 
-		sudo apt-get install bison pkg-config gawk clang flex gcc-msp430 iverilog
+		sudo apt-get install bison pkg-config gawk clang flex gcc-msp430 iverilog tcl-dev
 		cd scripts
 		sudo make install
 
