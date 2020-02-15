@@ -192,13 +192,17 @@ NOTE: running 753ms of simulation may take up to an hour. Zooming out the the wa
 
 NOTE: In the violation cases authetication token result (in p3_dout[7:0]) should *NOT* be set to the correct value. Since there was a (malicious) violation, the prover should not be able to produce the correct authenticated token (proof of execution). By checking the value of "exec" in the simulation window, one can see that exec value switches from 1 to 0 at the time of the violation.
 
+If you are running these test-cases on the Basys3 FPGA, "exec_flag" is hard-wired to LED8.
+In "simple_app", LED8 should remain ON (exec_flag=1, i.e., valid proof of execution).
+In "violation_forge_*", LED8 should turn OFF (exec_flag=1, i.e., valid proof of execution).
+
 ## Running VAPE Verification
 
 To check HW-Mod against VRASED and VAPE LTL subproperties using NuSMV run:
 
         make verify
 
-Note that running make verify proofs may take several minutes (depending on your computer setup,, up to 15 minutes).
+Note that running make verify proofs may take several minutes (Time may very widely depending on the setup, e.g., 22 minutes on a Ubuntu18 VM with 4 cores and 4GB of RAM).
 
 To run VAPE and VRASED end-to-end implementation proofs check the readme file in:
 
