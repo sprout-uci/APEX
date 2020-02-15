@@ -959,7 +959,7 @@ IBUF  SW0_PIN        (.O(p3_din[0]),                   .I(SW0));
 
 // LEDs (Port 1 outputs)
 //-----------------------
-OBUF  LED8_PIN       (.I(mclk),  .O(LED8));
+OBUF  LED8_PIN       (.I(exec_flag),  .O(LED8));
 OBUF  LED7_PIN       (.I(p3_dout[7] & p3_dout_en[7]),  .O(LED7));
 OBUF  LED6_PIN       (.I(p3_dout[6] & p3_dout_en[6]),  .O(LED6));
 OBUF  LED5_PIN       (.I(p3_dout[5] & p3_dout_en[5]),  .O(LED5));
