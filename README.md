@@ -139,10 +139,10 @@ Now we are ready to synthesize openmsp430 with VAPE's hardware the following ste
 
 10- On the left menu of the PROJECT MANAGER click "Run Synthesis", select execution parameters (e.g, number of CPUs used for synthesis) according to your PC's capabilities.
 
-11- If synthesis succeeds, you will be prompted with the next step to "Run Implementation". You need not to "Run Implementation" if you only want to run Simulation.
-Otherwise, if your purpose is to deploy VAPE on an FPGA, you need to select "Run Implementation" and wait until this process completes (typically takes around 1 hour).
+11- If synthesis succeeds, you will be prompted with the next step to "Run Implementation". You *do not* to "Run Implementation" if you only want simulate VAPE.
+"Run implementation" is only necessary if your purpose is to deploy VAPE on an FPGA.
 If you want to deploy VAPE on an FPGA, continue following the instructions on [Deploying VAPE on Basys3 FPGA].
-If you want to simulate VAPE on VIVADO tools, continue following the instructions on [Running VAPE on Vivado Simulation Tools].
+If you want to simulate VAPE using VIVADO sim-tools, continue following the instructions on [Running VAPE on Vivado Simulation Tools].
 
 #### Running VAPE on Vivado Simulation Tools
 
@@ -165,9 +165,9 @@ To determine instruction addresses of "success" function as well as those of ER 
 
 1- After Step 10 in [Creating a Vivado Project for VAPE], select "Run Implementation" and wait until this process completes (typically takes around 1 hour).
 
-2- If implementation succeeds select "Generate Bitstream" in the following window. This will generate the configuration binary to step up the FPGA according to VRASED hardware and software.
+2- If implementation succeeds, you will be prompted with another window, select option "Generate Bitstream" in this window. This will generate the bitstream that is used to step up the FPGA according to VRASED hardware and software.
 
-3- After the bitstream is generated, select "Open Hardware Manager", connect the FPGA to you computers USB port and click "Auto-Connect".
+3- After the bitstream is generated, select "Open Hardware Manager", connect the FPGA to you computer's USB port and click "Auto-Connect".
 Your FPGA should be now displayed on the hardware manager menu.
 
         Note: if you don't see your FPGA after auto-connect you might need to download Basys3 drivers to your computer.
