@@ -50,8 +50,6 @@ Dependencies on Ubuntu:
 		cd scripts
 		sudo make install
 
-To run soundness and security proofs, install Spot: https://spot.lrde.epita.fr/install.html
-
 ## Building VAPE Software
 To generate the Microcontroller program memory configuration containing VRASED trusted software (SW-Att) and sample applications we are going to use the Makefile inside the scripts directory:
 
@@ -146,17 +144,22 @@ Otherwise, if your purpose is to deploy VAPE on an FPGA, you need to select "Run
 If you want to deploy VAPE on an FPGA, continue following the instructions on [Deploying VAPE on Basys3 FPGA].
 If you want to simulate VAPE on VIVADO tools, continue following the instructions on [Running VAPE on Vivado Simulation Tools].
 
-## Running VAPE on Vivado Simulation Tools
+#### Running VAPE on Vivado Simulation Tools
+
+After completing the steps 1-10 in [Creating a Vivado Project for VAPE]:
 
 1- In Vivado, click "Add Sources" (Alt-A), then select "Add or create simulation sources", click "Add Files", and select everything in openmsp430/simulation.
-2- Now, navigate "Sources" window in Vivado. In "Simulation Sources" tab, set "tb_openMSP430_fpga.v" as top module
-3- Assuming we want to run simulation of PoX from the code in folder XX, open a linux terminal, go inside the scripts folder (./scripts) and run "make XX", i.e., "make simple_app" for "simple_app" testcase.
-4- Go back to Vivado window and in the "Flow Navigator" tab (on the left-most of Vivado), click "Run Simulation", then "Run Behavioral Simulation".
-5- Add how much time you want to run (See each testcase below) and do "Shift+F2" to run.
-6- In the green wave window you will see values for several signals. The imporant ones are "p3_dout[7:0]", "exec", and "pc[15:0]". pc cointains the program counter value. exec corresponds to the value of VAPE's exec flag, described in the paper. p3_dout[7:0] will store the token generated as a proof of execution.
 
-For all testcases, in Vivado simulation, the final value of pc[0:15] should correspond to instruction address inside "success" function (i.e., the program should halt inside "success" function).
-To determine instruction addresses of "success" function as well as those of ER function (values of ER_min and ER_max, per VAPE's paper), one can look into scripts/tmp-build/XX/vrased.lst and search for "success" or "dummy_function", respectively.
+2- Now, navigate "Sources" window in Vivado. Search for "tb_openMSP430_fpga", and *In "Simulation Sources" tab*, right-click "tb_openMSP430_fpga.v" and set its file type as top module.
+
+3- Go back to Vivado window and in the "Flow Navigator" tab (on the left-most part of Vivado's window), click "Run Simulation", then "Run Behavioral Simulation".
+
+4- On the newly opened simulation window, select a time span for your simulation to run (see times for each default test-case below) and the press "Shift+F2" to run.
+
+5- In the green wave window you will see values for several signals. The imporant ones are "exec", and "pc[15:0]". pc cointains the program counter value. exec corresponds to the value of VAPE's exec flag, described in the paper.
+
+In Vivado simulation, For all test-cases provided by default, the final value of pc[0:15] should correspond to the instruction address inside "success" function (i.e., the program should halt inside "success" function).
+To determine instruction addresses of "success" function as well as those of ER function (values of ER_min and ER_max, per VAPE's paper), one can check the compilation file at scripts/tmp-build/XX/vrased.lst  (where XX is the name of the test-case, i.e., if you ran "make simple_app", XX=simple_app). In this file search for "success" or "dummy_function", respectively.
 
 ## Deploying VAPE on Basys3 FPGA
 
@@ -195,7 +198,10 @@ To check HW-Mod against VRASED and VAPE LTL subproperties using NuSMV run:
 
         make verify
 
+Note that running make verify proofs may take several minutes (depending on your computer setup,, up to 15 minutes).
+
 To run VAPE and VRASED end-to-end implementation proofs check the readme file in:
 
         verification_specs/soundness_and_security_proofs
 
+To run end-to-end proofs you also need to install Spot: https://spot.lrde.epita.fr/install.html
