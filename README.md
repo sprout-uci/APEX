@@ -181,6 +181,8 @@ Your FPGA should be now displayed on the hardware manager menu.
 
 ## Description of Provided test-cases
 
+	For details on how exec flag detects PoX violations please check APEX paper. 
+
 #### 1- simple_app:
 
 Corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation.
