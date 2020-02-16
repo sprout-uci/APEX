@@ -50,14 +50,14 @@ Dependencies on Ubuntu:
 		cd scripts
 		sudo make install
 
-## Building VAPE Software
+## Building APEX Software
 To generate the Microcontroller program memory configuration containing VRASED trusted software (SW-Att) and sample applications we are going to use the Makefile inside the scripts directory:
 
         cd scripts
 
 This repository accompanies 4 test-cases: simple_app, violation_forge_ER, violation_forge_OR, violation_forge_META. (See [Description of Provided test-cases] for details on each test-case)
 These test-cases correspond to one successfull proof of execution (PoX) and 3 cases where PoX fails due to a violation that could be used to attack the correctness of the execution.
-To build VAPE for a specific test-case run:
+To build APEX for a specific test-case run:
 
         make "name of test-case"
 
@@ -81,21 +81,21 @@ If you want to clean the built files run:
 
         Note: Latest Build tested using msp430-gcc (GCC) 4.6.3 2012-03-01
 
-To test VAPE with a different application you will need to repeat these steps to generate the new "pmem.mem" file and re-run synthesis.
+To test APEX with a different application you will need to repeat these steps to generate the new "pmem.mem" file and re-run synthesis.
 
-## Creating a VAPE project on Vivado and Running Synthesis
+## Creating an APEX project on Vivado and Running Synthesis
 
-This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and XILINX Vivado v2019.2 (64-bit) IDE for Linux
+This is an example of how to synthesize and prototype APEX using Basys3 FPGA and XILINX Vivado v2019.2 (64-bit) IDE for Linux
 
 - Vivado IDE is available to download at: https://www.xilinx.com/support/download.html
 
 - Basys3 Reference/Documentation is available at: https://reference.digilentinc.com/basys3/refmanual
 
-#### Creating a Vivado Project for VAPE
+#### Creating a Vivado Project for APEX
 
 1 - Clone this repository;
 
-2 - Follow the steps in [Building VAPE Software](#building-VAPE-software) to generate .mem files for the application of your choice.
+2 - Follow the steps in [Building APEX Software](#building-APEX-software) to generate .mem files for the application of your choice.
 
 2- Start Vivado. On the upper left select: File -> New Project
 
@@ -112,7 +112,7 @@ This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and
 
 and select Next.
 
-Note that /msp_bin contains the pmem.mem and smem.mem binaries, generated in step [Building VAPE Software].
+Note that /msp_bin contains the pmem.mem and smem.mem binaries, generated in step [Building APEX Software].
 
 5- In the "Add Constraints" window, select add files and add the file
 
@@ -120,13 +120,13 @@ Note that /msp_bin contains the pmem.mem and smem.mem binaries, generated in ste
 
 and select Next.
 
-        Note: this file needs to be modified accordingly if you are running VAPE in a different FPGA.
+        Note: this file needs to be modified accordingly if you are running APEX in a different FPGA.
 
 6- In the "Default Part" window select "Boards", search for Basys3, select it, and click Next.
 
         Note: if you don't see Basys3 as an option you may need to download Basys3 to your Vivado installation.
 
-7- Select "Finish". This will conclude the creation of a Vivado Project for VAPE.
+7- Select "Finish". This will conclude the creation of a Vivado Project for APEX.
 
 Now we need to configure the project for systhesis.
 
@@ -135,20 +135,20 @@ This will make openMSP430_fpga.v the top module in the project hierarchy. Now it
 
 9- In the same "Sources" window, search for openMSP430_defines.v file, right click it and select Set File Type and, from the dropdown menu select "Verilog Header".
 
-Now we are ready to synthesize openmsp430 with VAPE's hardware the following step might take several minutes.
+Now we are ready to synthesize openmsp430 with APEX hardware the following step might take several minutes.
 
 10- On the left menu of the PROJECT MANAGER click "Run Synthesis", select execution parameters (e.g, number of CPUs used for synthesis) according to your PC's capabilities.
 
-11- If synthesis succeeds, you will be prompted with the next step to "Run Implementation". You *do not* to "Run Implementation" if you only want simulate VAPE.
-"Run implementation" is only necessary if your purpose is to deploy VAPE on an FPGA.
+11- If synthesis succeeds, you will be prompted with the next step to "Run Implementation". You *do not* to "Run Implementation" if you only want simulate APEX.
+"Run implementation" is only necessary if your purpose is to deploy APEX on an FPGA.
 
-If you want to deploy VAPE on an FPGA, continue following the instructions on [Deploying VAPE on Basys3 FPGA].
+If you want to deploy APEX on an FPGA, continue following the instructions on [Deploying APEX on Basys3 FPGA].
 
-If you want to simulate VAPE using VIVADO sim-tools, continue following the instructions on [Running VAPE on Vivado Simulation Tools].
+If you want to simulate APEX using VIVADO sim-tools, continue following the instructions on [Running APEX on Vivado Simulation Tools].
 
-## Running VAPE on Vivado Simulation Tools
+## Running APEX on Vivado Simulation Tools
 
-After completing the steps 1-10 in [Creating a Vivado Project for VAPE]:
+After completing the steps 1-10 in [Creating a Vivado Project for APEX]:
 
 1- In Vivado, click "Add Sources" (Alt-A), then select "Add or create simulation sources", click "Add Files", and select everything inside openmsp430/simulation.
 
@@ -158,17 +158,17 @@ After completing the steps 1-10 in [Creating a Vivado Project for VAPE]:
 
 4- On the newly opened simulation window, select a time span for your simulation to run (see times for each default test-case below) and the press "Shift+F2" to run.
 
-5- In the green wave window you will see values for several signals. The imporant ones are "exec", and "pc[15:0]". pc cointains the program counter value. exec corresponds to the value of VAPE's exec flag, as described in the paper.
+5- In the green wave window you will see values for several signals. The imporant ones are "exec", and "pc[15:0]". pc cointains the program counter value. exec corresponds to the value of APEX's exec flag, as described in the paper.
 
 In Vivado simulation, for all test-cases provided by default, the final value of pc[0:15] should correspond to the instruction address inside "success" function (i.e., the program should halt inside "success" function).
 
-To determine the address of an instruction, e.g, addresses of the "success" function as well start and end addresses of ER (values of ER_min and ER_max, per VAPE's paper) one can check the compilation file at scripts/tmp-build/XX/vrased.lst  (where XX is the name of the test-case, i.e., if you ran "make simple_app", XX=simple_app). In this file search for the name of the function of interest, e.g., "success" or "dummy_function", etc.
+To determine the address of an instruction, e.g, addresses of the "success" function as well start and end addresses of ER (values of ER_min and ER_max, per APEX's paper) one can check the compilation file at scripts/tmp-build/XX/vrased.lst  (where XX is the name of the test-case, i.e., if you ran "make simple_app", XX=simple_app). In this file search for the name of the function of interest, e.g., "success" or "dummy_function", etc.
 
-#### NOTE: To simulate a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for VAPE]) on Vivado. 
+#### NOTE: To simulate a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for APEX]) on Vivado. 
 
-## Deploying VAPE on Basys3 FPGA
+## Deploying APEX on Basys3 FPGA
 
-1- After Step 10 in [Creating a Vivado Project for VAPE], select "Run Implementation" and wait until this process completes (typically takes around 1 hour).
+1- After Step 10 in [Creating a Vivado Project for APEX], select "Run Implementation" and wait until this process completes (typically takes around 1 hour).
 
 2- If implementation succeeds, you will be prompted with another window, select option "Generate Bitstream" in this window. This will generate the bitstream that is used to step up the FPGA according to VRASED hardware and software.
 
@@ -181,7 +181,7 @@ Your FPGA should be now displayed on the hardware manager menu.
 
 ## Description of Provided test-cases
 
-	For details on how exec flag detects PoX violations please check APEX paper. 
+	For details on how APEX controls the exec flag to generate unforgeable proofs of execution (PoX) please check APEX paper. 
 
 #### 1- simple_app:
 
@@ -229,17 +229,17 @@ If you are running these test-cases on the Basys3 FPGA, by default "exec_flag" i
 In "simple_app", LED8 should remain ON (exec_flag=1, i.e., valid proof of execution).
 In "violation_forge_*", LED8 should turn OFF (exec_flag=1, i.e., valid proof of execution).
 
-#### NOTE: To simulate (or run a test with and FPGA) using a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for VAPE]) on Vivado.
+#### NOTE: To simulate (or run a test with and FPGA) using a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for APEX]) on Vivado.
 
-## Running VAPE Verification
+## Running APEX Verification
 
-To check HW-Mod against VRASED and VAPE LTL subproperties using NuSMV run:
+To check HW-Mod against VRASED and APEX LTL subproperties using NuSMV run:
 
         make verify
 
 Note that running make verify proofs may take several minutes (Time may very widely depending on the setup, e.g., 22 minutes on a Ubuntu18 VM with 4 cores and 4GB of RAM).
 
-To run VAPE and VRASED end-to-end implementation proofs check the readme file in:
+To run APEX and VRASED end-to-end implementation proofs check the readme file in:
 
         verification_specs/soundness_and_security_proofs
 
