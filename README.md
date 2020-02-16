@@ -56,10 +56,10 @@ To generate the Microcontroller program memory configuration containing VRASED t
         cd scripts
 
 This repository accompanies 4 test-cases: simple_app, violation_forge_ER, violation_forge_OR, violation_forge_META. (See [Description of Provided test-cases] for details)
-These test cases correspond to a successfull proof of execution (PoX) and 3 cases where PoX fails due to a violation that could be used to attack the correctness of the execution.
-To build VAPE for a specific test case run
+These test-cases correspond to a successfull proof of execution (PoX) and 3 cases where PoX fails due to a violation that could be used to attack the correctness of the execution.
+To build VAPE for a specific test-case run
 
-        make "name of test case"
+        make "name of test-case"
 
 For instance:
 
