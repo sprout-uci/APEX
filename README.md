@@ -144,7 +144,7 @@ Now we are ready to synthesize openmsp430 with VAPE's hardware the following ste
 If you want to deploy VAPE on an FPGA, continue following the instructions on [Deploying VAPE on Basys3 FPGA].
 If you want to simulate VAPE using VIVADO sim-tools, continue following the instructions on [Running VAPE on Vivado Simulation Tools].
 
-#### Running VAPE on Vivado Simulation Tools
+## Running VAPE on Vivado Simulation Tools
 
 After completing the steps 1-10 in [Creating a Vivado Project for VAPE]:
 
