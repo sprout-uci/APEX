@@ -161,7 +161,7 @@ After completing the steps 1-10 in [Creating a Vivado Project for VAPE]:
 In Vivado simulation, For all test-cases provided by default, the final value of pc[0:15] should correspond to the instruction address inside "success" function (i.e., the program should halt inside "success" function).
 To determine instruction addresses of "success" function as well as those of ER function (values of ER_min and ER_max, per VAPE's paper), one can check the compilation file at scripts/tmp-build/XX/vrased.lst  (where XX is the name of the test-case, i.e., if you ran "make simple_app", XX=simple_app). In this file search for "success" or "dummy_function", respectively.
 
-#### NOTE: To simulate a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for VAPE]) in Vivado. 
+#### NOTE: To simulate a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for VAPE]) on Vivado. 
 
 ## Deploying VAPE on Basys3 FPGA
 
