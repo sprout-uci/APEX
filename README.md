@@ -176,25 +176,33 @@ Your FPGA should be now displayed on the hardware manager menu.
 
 ## Description of Provided Testcases
 
-1- simple_app: corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation, (3) output the token (in this case, write it to P3OUT -- p3_dout[7:0] in vivado simulation window).
-At the end of simple_app's simulation, P3OUT (over time) should store the correct authenticated token value: "3622822327FC4E8FE649D44CB964E98C50050446364925B10D533BE831706064".
-This corresponds to a token computed over attested memory with exec=1 (valid proof of execution).
+1- simple_app: corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation.
+
+At the end of simple_app's simulation, attestation resulst in the correct authenticated token value: "3622822327FC4E8FE649D44CB964E98C50050446364925B10D533BE831706064".
+
+This corresponds to attestation (HMAC-SHA256) computed over memory containg exec value 1 (valid proof of execution).
 See utils/get_token_simple_app.py for how this token is generated.
-In this testcase, you need to run the simulation for 753ms (in simulation time, not real time) to generate the authenticated token value on P3OUT.
 
-NOTE: running 753ms of simulation may take up to an hour. Zooming out the the waves windows can help in speeding up the process.
+NOTE: Attestation computation takes 753ms of simulation. Simulation of 753ms may take up to an hour to complete. Zooming out the the waves windows can help in speeding up the process.
 
-2- violation_forge_ER: corresponds to a testcase where code in region ER is overwritten after it executed. It should take less than 1ms to complete this simulation.
+2- violation_forge_ER: corresponds to a testcase where code in region ER is overwritten after its execution, exec_flag value switches to 0 due to the violation.
+
+It should take less than 1ms of simulation to visualize this effect.
 
 3- violation_forge_OR: corresponds to a testcase where result in OR region is overwritten after ER executed. It should take less than 1ms to complete this simulation.
 
+It should take less than 1ms of simulation to visualize this effect.
+
+
 4- violation_forge_META: correspond to a testcase where METADATA value is overwritten after ER executed. It should take less than 1ms to complete this simulation.
 
-NOTE: In the violation cases authetication token result (in p3_dout[7:0]) should *NOT* be set to the correct value. Since there was a (malicious) violation, the prover should not be able to produce the correct authenticated token (proof of execution). By checking the value of "exec" in the simulation window, one can see that exec value switches from 1 to 0 at the time of the violation.
+It should take less than 1ms of simulation to visualize this effect.
 
 If you are running these test-cases on the Basys3 FPGA, "exec_flag" is hard-wired to LED8.
 In "simple_app", LED8 should remain ON (exec_flag=1, i.e., valid proof of execution).
 In "violation_forge_*", LED8 should turn OFF (exec_flag=1, i.e., valid proof of execution).
+
+5- Examples of simulation test-cases are provided below.
 
 - Simulation window for a valid PoX with simple_app test-case. exec_flag remains 1 until the start of attestation (PC=E000 is the first instruction in attestation code):
 
