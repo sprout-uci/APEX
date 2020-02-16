@@ -15,8 +15,6 @@
 // ERMIN/MAX_VAL should correspond to address of dummy_function
 #define ERMIN_VAL 0xE0B2
 #define ERMAX_VAL 0xE0C6
-// TODO: OpenMSP430 does not support writes to physical memory, for now we assume it's 0x200 is in physical memory
-// One way to fix is to pass OR value as challenge in VRASED?
 #define ORMIN_VAL 0x200 
 #define ORMAX_VAL 0x210
 
