@@ -66,26 +66,26 @@ For instance:
         make simple_app
 
 to build the software including the binaries of simple_app test-case.
-Note that this step will not run any simulation but simply generate the MSP430 binaries corresponding to the test-case of choice.
+Note that this step will not run any simulation, but simply generate the MSP430 binaries corresponding to the test-case of choice.
 As a result of the build, two files pmem.mem and smem.mem should be created inside msp_bin directory:
 
 - pmem.mem program memory contents corresponding the application binaries
 
 - smem.mem contains SW-Att binaries.
 
-In the next steps, during synthesis, these files will be load these binaries to the MSP430 memory when we either: synthesize VAPE on the FPGA or run VAPE in simulation using VIVADO simulation tools.
+In the next steps, during synthesis, these files will be loaded to the MSP430 memory when we either: deploy APEX on the FPGA or run APEX simulation using VIVADO simulation tools.
 
-To clean the built files run:
+If you want to clean the built files run:
 
         make clean
 
         Note: Latest Build tested using msp430-gcc (GCC) 4.6.3 2012-03-01
 
-To test VAPE with a different application you will need to repeat these steps to generate the new "pmem.mem" file and re-run synthesis (see below).
+To test VAPE with a different application you will need to repeat these steps to generate the new "pmem.mem" file and re-run synthesis.
 
 ## Creating a VAPE project on Vivado and Running Synthesis
 
-This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and XILINX Vivado v2017.4 (64-bit) IDE for Linux
+This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and XILINX Vivado v2019.2 (64-bit) IDE for Linux
 
 - Vivado IDE is available to download at: https://www.xilinx.com/support/download.html
 
@@ -95,7 +95,7 @@ This is an example of how to synthesize and prototype VAPE using Basys3 FPGA and
 
 1 - Clone this repository;
 
-2 - Follow the steps in [Building VAPE Software](#building-VAPE-software) to generate .mem files of your choice.
+2 - Follow the steps in [Building VAPE Software](#building-VAPE-software) to generate .mem files for the application of your choice.
 
 2- Start Vivado. On the upper left select: File -> New Project
 
@@ -148,7 +148,7 @@ If you want to simulate VAPE using VIVADO sim-tools, continue following the inst
 
 After completing the steps 1-10 in [Creating a Vivado Project for VAPE]:
 
-1- In Vivado, click "Add Sources" (Alt-A), then select "Add or create simulation sources", click "Add Files", and select everything in openmsp430/simulation.
+1- In Vivado, click "Add Sources" (Alt-A), then select "Add or create simulation sources", click "Add Files", and select everything inside openmsp430/simulation.
 
 2- Now, navigate "Sources" window in Vivado. Search for "tb_openMSP430_fpga", and *In "Simulation Sources" tab*, right-click "tb_openMSP430_fpga.v" and set its file type as top module.
 
@@ -156,10 +156,10 @@ After completing the steps 1-10 in [Creating a Vivado Project for VAPE]:
 
 4- On the newly opened simulation window, select a time span for your simulation to run (see times for each default test-case below) and the press "Shift+F2" to run.
 
-5- In the green wave window you will see values for several signals. The imporant ones are "exec", and "pc[15:0]". pc cointains the program counter value. exec corresponds to the value of VAPE's exec flag, described in the paper.
+5- In the green wave window you will see values for several signals. The imporant ones are "exec", and "pc[15:0]". pc cointains the program counter value. exec corresponds to the value of VAPE's exec flag, as described in the paper.
 
-In Vivado simulation, For all test-cases provided by default, the final value of pc[0:15] should correspond to the instruction address inside "success" function (i.e., the program should halt inside "success" function).
-To determine instruction addresses of "success" function as well as those of ER function (values of ER_min and ER_max, per VAPE's paper), one can check the compilation file at scripts/tmp-build/XX/vrased.lst  (where XX is the name of the test-case, i.e., if you ran "make simple_app", XX=simple_app). In this file search for "success" or "dummy_function", respectively.
+In Vivado simulation, for all test-cases provided by default, the final value of pc[0:15] should correspond to the instruction address inside "success" function (i.e., the program should halt inside "success" function).
+One can determine instruction addresses of "success" function as well as those of ER function (values of ER_min and ER_max, per VAPE's paper) by checking the compilation file at scripts/tmp-build/XX/vrased.lst  (where XX is the name of the test-case, i.e., if you ran "make simple_app", XX=simple_app). In this file search for "success" or "dummy_function", respectively.
 
 #### NOTE: To simulate a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for VAPE]) on Vivado. 
 
@@ -208,10 +208,6 @@ Corresponds to a test-case where METADATA value is overwritten after ER executed
 
 It should take less than 1ms of simulation to visualize this effect.
 
-If you are running these test-cases on the Basys3 FPGA, "exec_flag" is hard-wired to LED8.
-In "simple_app", LED8 should remain ON (exec_flag=1, i.e., valid proof of execution).
-In "violation_forge_*", LED8 should turn OFF (exec_flag=1, i.e., valid proof of execution).
-
 5- Examples of simulation test-cases are provided below.
 
 - Simulation window for a valid PoX with simple_app test-case. exec_flag remains 1 until the start of attestation (PC=E000 is the first instruction in attestation code):
@@ -222,7 +218,13 @@ In "violation_forge_*", LED8 should turn OFF (exec_flag=1, i.e., valid proof of 
 
 <img src="./img/violation_example.png" width="900" height="150">
 
+#### FPGA
 
+If you are running these test-cases on the Basys3 FPGA, by default "exec_flag" is hard-wired to LED8.
+In "simple_app", LED8 should remain ON (exec_flag=1, i.e., valid proof of execution).
+In "violation_forge_*", LED8 should turn OFF (exec_flag=1, i.e., valid proof of execution).
+
+#### NOTE: To simulate a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for VAPE]) on Vivado.
 
 ## Running VAPE Verification
 
