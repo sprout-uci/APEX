@@ -206,11 +206,11 @@ In "violation_forge_*", LED8 should turn OFF (exec_flag=1, i.e., valid proof of 
 
 - Simulation window for a valid PoX with simple_app test-case. exec_flag remains 1 until the start of attestation (PC=E000 is the first instruction in attestation code):
 
-<img src="./img/pox_success_example.png" width="900" height="200">
+<img src="./img/pox_success_example.png" width="900" height="150">
 
 - Simulation window for a Violation example. Violation occurs at instruction PC=E098 causing exec_flag to switch to 0: 
 
-<img src="./img/violation_example.png" width="900" height="200">
+<img src="./img/violation_example.png" width="900" height="150">
 
 
 
