@@ -38,7 +38,7 @@ In  this  work  we  answer  these  questions  by  designing, showing security of
 		└── sw-att
 		    └── hacl-c
 
-## Dependencies
+## Dependencies Installation
 
 Environment (processor and OS) used for development and verification:
 Intel i7-3770
