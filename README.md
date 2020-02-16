@@ -141,7 +141,9 @@ Now we are ready to synthesize openmsp430 with VAPE's hardware the following ste
 
 11- If synthesis succeeds, you will be prompted with the next step to "Run Implementation". You *do not* to "Run Implementation" if you only want simulate VAPE.
 "Run implementation" is only necessary if your purpose is to deploy VAPE on an FPGA.
+
 If you want to deploy VAPE on an FPGA, continue following the instructions on [Deploying VAPE on Basys3 FPGA].
+
 If you want to simulate VAPE using VIVADO sim-tools, continue following the instructions on [Running VAPE on Vivado Simulation Tools].
 
 ## Running VAPE on Vivado Simulation Tools
