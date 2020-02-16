@@ -55,7 +55,7 @@ To generate the Microcontroller program memory configuration containing VRASED t
 
         cd scripts
 
-This repository accompanies 4 test-cases: simple_app, violation_forge_ER, violation_forge_OR, violation_forge_META. (See [Description of Provided Testcases] for details)
+This repository accompanies 4 test-cases: simple_app, violation_forge_ER, violation_forge_OR, violation_forge_META. (See [Description of Provided test-cases] for details)
 These test cases correspond to a successfull proof of execution (PoX) and 3 cases where PoX fails due to a violation that could be used to attack the correctness of the execution.
 To build VAPE for a specific test case run
 
@@ -174,9 +174,11 @@ Your FPGA should be now displayed on the hardware manager menu.
 
 4- Right-click your FPGA and select "Program Device" to program the FPGA.
 
-## Description of Provided Testcases
+## Description of Provided test-cases
 
-1- simple_app: corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation.
+#### 1- simple_app:
+
+Corresponds to a toy proof of execution, i.e., (1) execute "dummy_function", (2) compute proof of execution token via attestation.
 
 At the end of simple_app's simulation, attestation resulst in the correct authenticated token value: "3622822327FC4E8FE649D44CB964E98C50050446364925B10D533BE831706064".
 
@@ -185,16 +187,22 @@ See utils/get_token_simple_app.py for how this token is generated.
 
 NOTE: Attestation computation takes 753ms of simulation. Simulation of 753ms may take up to an hour to complete. Zooming out the the waves windows can help in speeding up the process.
 
-2- violation_forge_ER: corresponds to a testcase where code in region ER is overwritten after its execution, exec_flag value switches to 0 due to the violation.
+#### 2- violation_forge_ER:
+
+Corresponds to a test-case where code in region ER is overwritten after its execution, exec_flag value switches to 0 due to the violation.
 
 It should take less than 1ms of simulation to visualize this effect.
 
-3- violation_forge_OR: corresponds to a testcase where result in OR region is overwritten after ER executed. It should take less than 1ms to complete this simulation.
+#### 3- violation_forge_OR:
+
+Corresponds to a test-case where result in OR region is overwritten after ER executed. It should take less than 1ms to complete this simulation.
 
 It should take less than 1ms of simulation to visualize this effect.
 
 
-4- violation_forge_META: correspond to a testcase where METADATA value is overwritten after ER executed. It should take less than 1ms to complete this simulation.
+#### 4- violation_forge_META:
+
+Corresponds to a test-case where METADATA value is overwritten after ER executed. It should take less than 1ms to complete this simulation.
 
 It should take less than 1ms of simulation to visualize this effect.
 
