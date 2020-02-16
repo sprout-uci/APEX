@@ -56,8 +56,8 @@ To generate the Microcontroller program memory configuration containing VRASED t
         cd scripts
 
 This repository accompanies 4 test-cases: simple_app, violation_forge_ER, violation_forge_OR, violation_forge_META. (See [Description of Provided test-cases] for details)
-These test-cases correspond to a successfull proof of execution (PoX) and 3 cases where PoX fails due to a violation that could be used to attack the correctness of the execution.
-To build VAPE for a specific test-case run
+These test-cases correspond to one successfull proof of execution (PoX) and 3 cases where PoX fails due to a violation that could be used to attack the correctness of the execution.
+To build VAPE for a specific test-case run:
 
         make "name of test-case"
 
@@ -211,7 +211,7 @@ Corresponds to a test-case where METADATA value is overwritten after ER executed
 
 It should take less than 1ms of simulation to visualize this effect.
 
-5- Examples of simulation test-cases are provided below.
+#### 5- Examples of simulation test-cases are provided below.
 
 - Simulation window for a valid PoX with simple_app test-case. exec_flag remains 1 until the start of attestation (PC=E000 is the first instruction in attestation code):
 
@@ -221,13 +221,13 @@ It should take less than 1ms of simulation to visualize this effect.
 
 <img src="./img/violation_example.png" width="900" height="150">
 
-#### FPGA
+#### FPGA Runs
 
 If you are running these test-cases on the Basys3 FPGA, by default "exec_flag" is hard-wired to LED8.
 In "simple_app", LED8 should remain ON (exec_flag=1, i.e., valid proof of execution).
 In "violation_forge_*", LED8 should turn OFF (exec_flag=1, i.e., valid proof of execution).
 
-#### NOTE: To simulate a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for VAPE]) on Vivado.
+#### NOTE: To simulate (or run a test with and FPGA) using a different test-case you need to re-run "make test-case_name" to generate the corresponding pmem.mem file and re-run the synthesis step (step 10 in [Creating a Vivado Project for VAPE]) on Vivado.
 
 ## Running VAPE Verification
 
