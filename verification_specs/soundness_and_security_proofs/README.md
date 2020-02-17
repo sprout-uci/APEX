@@ -1,4 +1,4 @@
-# VAPE End-To-End Proofs
+# APEX End-To-End Proofs
 
 ### Pre-Requisite:
 
@@ -19,5 +19,5 @@
 - The proof for Theorem 2 in VRASED's paper is split into two files:
 	1) proof_theorem2_1.ltl contains the proof for preventing untrusted software from directly accessing the attestation key.
 	2) proof_theorem2_2.ltl contains the proof for no key leakage through memory
-- "e2e_vape.ltl" contains proof for VAPE's theorem 1 
+- "e2e_vape.ltl" contains proof for APEX theorem 1 (see APEX paper) 
 
