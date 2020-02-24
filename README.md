@@ -4,6 +4,8 @@ Modern society is increasingly surrounded by, and is growingaccustomed to, a wid
 
 In  this  work  we  answer  these  questions  by  designing, showing security of, and formally verifying, APEX: Architecture Proofs of Execution (formally known as VAPE -- we use VAPE and APEX interchangably in this repo). To the best of our knowl-edge, this is the first of its kind result for low-end embeddedsystems. Our work has a range of applications, especially, to authenticated sensing and trustworthy actuation, which are increasingly relevant in the context of safety-critical systems. APEX architecture is publicly available and our evaluation indicates that it incurs low overhead, affordable even for very low-end embedded devices, e.g., those based on TI MSP430 or AVR ATmega processors.
 
+APEX paper (to appear Usenix Sec'20): https://arxiv.org/abs/1908.02444
+
 ### APEX Directory Structure
 
 	├── msp_bin
