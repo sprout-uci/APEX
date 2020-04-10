@@ -58,7 +58,7 @@ __attribute__ ((section (".do_mac.call"))) void Hacl_HMAC_SHA2_256_hmac_entry(ui
 
 	uint16_t ORmin = *((uint16_t*)(ORMIN_ADDR));
 	uint16_t ORmax = *((uint16_t*)(ORMAX_ADDR));
-	if (ORmin < ORmax && ORmin < 0x1000 && ORmax < 0x6000){
+	if (ORmin < ORmax && ORmin > 0x1000 && ORmax < 0x6000){
 		hmac((uint8_t*) key, (uint8_t*) key, (uint32_t) 32, (uint8_t*) ORmin, ORmax - ORmin);
 	}
 
