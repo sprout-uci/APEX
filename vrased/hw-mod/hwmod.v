@@ -78,8 +78,8 @@ parameter KMEM_SIZE = 16'h001F;
 parameter META_min = 16'h0140;
 parameter META_max = 16'h0140 + 16'h002A;
 //
-parameter EXEC_min = 16'hFF08;
-parameter EXEC_max = EXEC_min + 16'h0002;
+//parameter EXEC_min = 16'hFF08;
+//parameter EXEC_max = EXEC_min + 16'h0002;
 parameter RESET_HANDLER = 16'h0000;
 
 wire vrased_reset;
