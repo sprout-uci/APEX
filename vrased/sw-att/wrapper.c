@@ -58,13 +58,13 @@ __attribute__ ((section (".do_mac.call"))) void Hacl_HMAC_SHA2_256_hmac_entry(ui
  * This work-around OpenMSP430 limitation has *not* been formally verified. */
 // XXX: If your PoX application demands authenticated outputs uncomment the following block to include OR in the attestation result.
 
-
+/*
 	uint16_t ORmin = *((uint16_t*)(ORMIN_ADDR));
 	uint16_t ORmax = *((uint16_t*)(ORMAX_ADDR));
 	if (ORmin < ORmax && ORmin > 0x1000 && ORmax < 0x6000){
 		hmac((uint8_t*) key, (uint8_t*) key, (uint32_t) 32, (uint8_t*) ORmin, ORmax - ORmin);
 	}
-
+*/
         // Uses the result in the key buffer to compute HMAC.
         // Stores the result in HMAC ADDR.
         hmac((uint8_t*) (MAC_ADDR), (uint8_t*) key, (uint32_t) 32, (uint8_t*) ATTEST_DATA_ADDR, (uint32_t) ATTEST_SIZE);
