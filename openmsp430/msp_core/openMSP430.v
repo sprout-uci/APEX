@@ -569,7 +569,7 @@ hwmod hdmod_0(
     .clk        (dma_mclk),
     .pc         (inst_pc),
     .data_en    (eu_mb_en),
-    .data_wr    (&eu_mb_wr),
+    .data_wr    (|eu_mb_wr),
     .data_addr  (eu_mab),
 
     .dma_addr   ({1'b0, dma_addr[15:1]}),
@@ -587,21 +587,6 @@ hwmod hdmod_0(
     .reset      (vrased_reset),
     .exec       (exec_flag)  
 );
-
-/*
-vrased vrased_0 (
-    .clk        (dma_mclk),
-    .pc         (pc),
-    .data_en    (eu_mb_en),
-    .data_wr    (&eu_mb_wr),
-    .data_addr  (eu_mab),
-
-    .dma_addr   ({1'b0, dma_addr[15:1]}),
-    .dma_en     (dma_en),
-
-    .reset      (vrased_reset)        // Reset due to invalid SROM access
-);
-*/
 
 
 //=============================================================================
