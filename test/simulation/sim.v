@@ -8,7 +8,7 @@ initial
       $display(" ===============================================");
       repeat(5) @(posedge mclk);
       stimulus_done = 0;
-      #10 $monitor("pc = %h, r1 = %h, r2 = %h, r3 = %h, r4 = %h, r5 = %h, r6 = %h, r14 = %h, srom_dout = %h, srom_cen = %h, pmem_cen = %h, decode = %h\n", dut.inst_pc, r1, r2, r3, r4, r5, r6, r14, dut.srom_dout, dut.srom_cen, dut.pmem_cen, dut.frontend_0.decode);
+      #10 $monitor("pc = %h, r1 = %h, r2 = %h, r3 = %h, r4 = %h, r5 = %h, r6 = %h, r14 = %h, srom_dout = %h, srom_cen = %h, pmem_cen = %h, exec = %h, ER_min = %h\n", dut.inst_pc, r1, r2, r3, r4, r5, r6, r14, dut.srom_dout, dut.srom_cen, dut.pmem_cen, dut.hdmod_0.vape_0.exec, dut.hdmod_0.vape_0.ER_min);
      
       @(r0==16'hfffe);
       $display("start");

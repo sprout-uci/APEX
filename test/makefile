@@ -1,6 +1,6 @@
 # makfile configuration
 NAME            = vrased
-OBJECTS         = vrased.o ../vrased.swatt
+OBJECTS         = vrased.o ../vrased.swatt 
 
 # Choose GCC toolchain prefix ('msp430' for MSPGCC / 'msp430-elf' for GCC RedHat/TI)
 MSPGCC_PFX      = msp430
@@ -35,7 +35,6 @@ ${NAME}.size: ${NAME}.elf
 
 ${NAME}.o: main.c
 	${CC} ${CFLAGS} -c -o $@ main.c
-
 
 clean:
 	rm -f ${NAME} ${NAME}.a43 ${NAME}.lst ${NAME}.elf ${NAME}.size *.o pmem.def
