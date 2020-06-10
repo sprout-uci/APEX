@@ -22,6 +22,9 @@ violation_forge_ER :
 violation_forge_META :
 	sh build/run "violation_forge_META" true
 
+test :
+	sh build/run "test" true
+
 verify :
 	sh verif-tools/run
 
