@@ -13,8 +13,8 @@
 #define EXEC_ADDR (ORMAX_ADDR+2)
 
 // ERMIN/MAX_VAL should correspond to address of dummy_function
-#define ERMIN_VAL 0xE0B2
-#define ERMAX_VAL 0xE0C6
+#define ERMIN_VAL 0xE0DA
+#define ERMAX_VAL 0xE0EE
 #define ORMIN_VAL 0x200 
 #define ORMAX_VAL 0x210
 
@@ -31,7 +31,6 @@ void dummy_function() {
 	for(i=0; i<32; i++) out[i] = i+i;
 }
 
-// Should end at 0xe0cc
 void success() {
     __asm__ volatile("bis     #240,   r2" "\n\t");  
 }
@@ -69,15 +68,16 @@ int main() {
     // Execute ER
     ((void(*)(void))ERmin)();                      
 
-    // EXEC flag should be 1
+    // Call VRASED
+    my_memcpy(challenge, (uint8_t*)CHAL_ADDR, 32);
+    VRASED(challenge, response, 0);                 
+
+    // Write token to P3OUT one by one
+    int i;
+    for(i=0; i<32; i++) P3OUT = response[i];
+
     exec = *((uint16_t*)(EXEC_ADDR));
     if(exec != 1) fail();  
-
-    // Now modify OR value, causing a violation. 
-    // EXEC flag now should be 0 
-    *((uint16_t*)(ORMIN_VAL)) = 0xFFFF;
-    exec = *((uint16_t*)(EXEC_ADDR));
-    if(exec != 0) fail();  
 
     success();
     
