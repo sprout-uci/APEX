@@ -13,8 +13,8 @@
 #define EXEC_ADDR (ORMAX_ADDR+2)
 
 // ERMIN/MAX_VAL should correspond to address of dummy_function
-#define ERMIN_VAL 0xE0DA
-#define ERMAX_VAL 0xE0EE
+#define ERMIN_VAL 0xE0C2
+#define ERMAX_VAL 0xE0D6
 #define ORMIN_VAL 0x200 
 #define ORMAX_VAL 0x210
 
@@ -65,19 +65,21 @@ int main() {
     // Sanity check
     if(ERmin != ERMIN_VAL || ERmax != ERMAX_VAL || ORmin != ORMIN_VAL || ORmax != ORMAX_VAL || exec == 1) fail();
 
-    // Execute ER
-    ((void(*)(void))ERmin)();                      
-
-    // Call VRASED
-    my_memcpy(challenge, (uint8_t*)CHAL_ADDR, 32);
-    VRASED(challenge, response, 0);                 
-
-    // Write token to P3OUT one by one
     int i;
-    for(i=0; i<32; i++) P3OUT = response[i];
+    for(i=0; i<42; i+=10) {
+        // Execute ER
+        ((void(*)(void))ERmin)();                      
 
-    exec = *((uint16_t*)(EXEC_ADDR));
-    if(exec != 1) fail();  
+        // EXEC flag should be 1
+        exec = *((uint16_t*)(EXEC_ADDR));
+        if(exec != 1) fail();  
+
+        // Now modify METADATA value, causing a violation. 
+        // EXEC flag now should be 0 
+        *((uint16_t*)(METADATA_ADDR+i)) = 0xFFFF;
+        exec = *((uint16_t*)(EXEC_ADDR));
+        if(exec != 0) fail();
+    }  
 
     success();
     

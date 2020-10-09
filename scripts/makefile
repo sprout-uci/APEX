@@ -10,11 +10,20 @@ install :
 	sh build.sh ; \
 	cp verilog2smv.sh ../
 
-proxy :
-	sh build/run "proxy" true
-
 simple_app :
 	sh build/run "simple_app" true
+
+violation_forge_OR :
+	sh build/run "violation_forge_OR" true
+
+violation_forge_ER :
+	sh build/run "violation_forge_ER" true
+
+violation_forge_META :
+	sh build/run "violation_forge_META" true
+
+test :
+	sh build/run "test" true
 
 verify :
 	sh verif-tools/run
