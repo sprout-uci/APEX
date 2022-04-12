@@ -3,7 +3,7 @@
 #define MAC_ADDR 0x0230
 #define KEY_ADDR 0x6A00
 #define ATTEST_DATA_ADDR 0xE000
-#define ATTEST_SIZE 0x20 //0x1000
+#define ATTEST_SIZE 0x1000
 #define METADATA_ADDR 0x140
 #define METADATA_SIZE 42 // 32-byte challenge, 2-byte ERmin, ERmax, ORmin, ORmax, EXEC
 #define CHAL_ADDR METADATA_ADDR
